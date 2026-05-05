@@ -19,6 +19,7 @@ CREATE TABLE utilisateurs (
 
 CREATE TABLE clients (
     id_client        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    numero_client    VARCHAR(20)  NOT NULL UNIQUE,
     nom              VARCHAR(255) NOT NULL,
     adresse          VARCHAR(255) NOT NULL,
     email            VARCHAR(255) NOT NULL UNIQUE,
