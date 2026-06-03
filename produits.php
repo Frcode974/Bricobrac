@@ -69,7 +69,7 @@ $produits = $stmt->fetchAll();
                             <?php endif; ?>
                         </td>
                         <td>
-                            <a href="produit.php?id=<?= $produit['id_produit'] ?>">Voir</a>
+                            <a href="detail_produit.php?id=<?= $produit['id_produit'] ?>">Voir</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
