@@ -3,13 +3,7 @@
 // FP3 — Tableau de bord administrateur
 // =====================================================================
 
-session_start();
-
-// Vérification : seuls les utilisateurs connectés ont accès
-if (!isset($_SESSION['id_utilisateur'])) {
-    header('Location: connexion.php');
-    exit;
-}
+require __DIR__ . '/includes/auth.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,10 +26,10 @@ if (!isset($_SESSION['id_utilisateur'])) {
         <p>Bonjour <?= htmlspecialchars($_SESSION['email']) ?>, vous êtes connecté en tant que <strong><?= htmlspecialchars($_SESSION['role']) ?></strong>.</p>
 
         <h3>Actions disponibles</h3>
-        <ul>
-            <li>Gestion des produits (à venir)</li>
-            <li>Gestion des utilisateurs (à venir)</li>
-        </ul>
+<ul>
+    <li><a href="admin_produits.php">Gestion des produits</a></li>
+    <li><a href="admin_utilisateurs.php">Gestion des utilisateurs</a></li>
+</ul>
     </main>
 
     <footer>
