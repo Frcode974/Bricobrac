@@ -21,6 +21,7 @@ require __DIR__ . '/includes/header.php';
                 <th>Prix final</th>
                 <th>Statut</th>
                 <th class="text-center">Détails</th>
+                <th class="text-center">Panier</th>
             </tr>
         </thead>
         <tbody>
@@ -57,6 +58,14 @@ require __DIR__ . '/includes/header.php';
                             Voir
                         </a>
                     </td>
+                    <td class="text-center" style="min-width: 180px;">
+    <form method="POST" action="panier.php" class="d-flex gap-2 justify-content-center">
+        <input type="hidden" name="action" value="ajouter">
+        <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+        <input type="number" name="quantite" value="1" min="1" class="form-control form-control-sm" style="width: 70px;">
+        <button type="submit" class="btn btn-success btn-sm">Ajouter</button>
+    </form>
+</td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

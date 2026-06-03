@@ -1,9 +1,10 @@
 <?php
-// Si auth.php a été appelé avant, on a déjà session_start().
-// Sinon on démarre la session pour pouvoir lire $_SESSION dans la nav.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+require_once __DIR__ . '/panier.php';
+$nbArticlesPanier = compterArticlesPanier();
 
 $estConnecte = isset($_SESSION['id_utilisateur']);
 $titrePage   = $titrePage ?? 'Brico\'brac';
@@ -27,6 +28,14 @@ $titrePage   = $titrePage ?? 'Brico\'brac';
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Accueil</a></li>
                     <li class="nav-item"><a class="nav-link" href="produits.php">Produits</a></li>
+                     <li class="nav-item">
+        <a class="nav-link" href="panier.php">
+            Panier
+            <?php if ($nbArticlesPanier > 0): ?>
+                <span class="badge bg-warning text-dark"><?= $nbArticlesPanier ?></span>
+            <?php endif; ?>
+        </a>
+    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <?php if ($estConnecte): ?>

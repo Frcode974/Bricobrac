@@ -74,7 +74,13 @@ require __DIR__ . '/includes/header.php';
                 </span>
             </div>
         </div>
-
+<form method="POST" action="panier.php" class="d-flex gap-2 mb-3">
+    <input type="hidden" name="action" value="ajouter">
+    <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+    <label class="form-label me-2 align-self-center">Quantité :</label>
+    <input type="number" name="quantite" value="1" min="1" class="form-control" style="width: 100px;">
+    <button type="submit" class="btn btn-success">Ajouter au panier</button>
+</form>
         <a href="produits.php" class="btn btn-outline-secondary">← Retour à la liste</a>
 
     </div>
