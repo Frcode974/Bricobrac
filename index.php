@@ -15,6 +15,7 @@
 
     <main>
         <p>Bienvenue sur Brico'brac ! La référence du magasin de bricolage près de chez vous !</p>
+        <p><a href="produits.php">Voir tous nos produits</a></p>
     </main>
 
     <footer>
