@@ -1,85 +1,66 @@
 <?php
-// =====================================================================
-// FP2 — Liste publique des produits
-// =====================================================================
-
 require __DIR__ . '/config/db.php';
 
-// Récupération de tous les produits, triés par nom
 $stmt = $pdo->query("SELECT * FROM produits ORDER BY nom");
 $produits = $stmt->fetchAll();
+
+$titrePage = "Liste des produits";
+require __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brico'brac — Liste des produits</title>
-</head>
-<body>
-    <header>
-    <h1>Brico'brac</h1>
-    <nav>
-        <a href="index.php">Accueil</a> |
-        <a href="produits.php">Liste des produits</a> |
-        <a href="connexion.php">Connexion admin</a>
-    </nav>
-</header>
 
-    <main>
-        <h2>Liste des produits</h2>
+<h2 class="mb-4">Liste des produits</h2>
 
-        <table border="1" cellpadding="6" cellspacing="0">
-            <thead>
+<div class="table-responsive bg-white p-3 rounded shadow-sm">
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Nom</th>
+                <th>Prix HT</th>
+                <th>Prix TTC</th>
+                <th>Remise</th>
+                <th>Prix final</th>
+                <th>Statut</th>
+                <th class="text-center">Détails</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($produits as $produit): ?>
+                <?php
+                $prixTtc      = $produit['prix_ht'] * (1 + $produit['tva_pourcentage'] / 100);
+                $prixFinalTtc = $prixTtc * (1 - $produit['remise_pourcentage'] / 100);
+                $aRemise      = $produit['remise_pourcentage'] > 0;
+                $estNouveaute = $produit['est_nouveaute'] == 1;
+                ?>
                 <tr>
-                    <th>Nom</th>
-                    <th>Prix HT</th>
-                    <th>Prix TTC</th>
-                    <th>Remise %</th>
-                    <th>Prix final</th>
-                    <th>Statut</th>
-                    <th>Détails</th>
+                    <td><?= htmlspecialchars($produit['nom']) ?></td>
+                    <td><?= number_format($produit['prix_ht'], 2, ',', ' ') ?> €</td>
+                    <td><?= number_format($prixTtc, 2, ',', ' ') ?> €</td>
+                    <td>
+                        <?php if ($aRemise): ?>
+                            <span class="badge bg-warning text-dark">
+                                -<?= number_format($produit['remise_pourcentage'], 0) ?>%
+                            </span>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
+                    </td>
+                    <td><strong><?= number_format($prixFinalTtc, 2, ',', ' ') ?> €</strong></td>
+                    <td>
+                        <?php if ($estNouveaute): ?>
+                            <span class="badge bg-success">Nouveauté</span>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="text-center">
+                        <a href="detail_produit.php?id=<?= $produit['id_produit'] ?>" class="btn btn-outline-primary btn-sm">
+                            Voir
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($produits as $produit): ?>
-                    <?php
-                    // Calculs des prix
-                    $prixTtc      = $produit['prix_ht'] * (1 + $produit['tva_pourcentage'] / 100);
-                    $prixFinalTtc = $prixTtc * (1 - $produit['remise_pourcentage'] / 100);
-                    $aRemise      = $produit['remise_pourcentage'] > 0;
-                    $estNouveaute = $produit['est_nouveaute'] == 1;
-                    ?>
-                    <tr>
-                        <td><?= htmlspecialchars($produit['nom']) ?></td>
-                        <td><?= number_format($produit['prix_ht'], 2, ',', ' ') ?> €</td>
-                        <td><?= number_format($prixTtc, 2, ',', ' ') ?> €</td>
-                        <td>
-                            <?php if ($aRemise): ?>
-                                <?= number_format($produit['remise_pourcentage'], 0) ?>%
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>
-                        </td>
-                        <td><?= number_format($prixFinalTtc, 2, ',', ' ') ?> €</td>
-                        <td>
-                            <?php if ($estNouveaute): ?>
-                                Nouveauté
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <a href="detail_produit.php?id=<?= $produit['id_produit'] ?>">Voir</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </main>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> Brico'brac</p>
-    </footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/footer.php'; ?>

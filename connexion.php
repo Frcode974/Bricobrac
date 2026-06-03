@@ -6,7 +6,6 @@
 session_start();
 require __DIR__ . '/config/db.php';
 
-// Si déjà connecté, rediriger directement vers l'admin
 if (isset($_SESSION['id_utilisateur'])) {
     header('Location: admin.php');
     exit;
@@ -26,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $utilisateur = $stmt->fetch();
 
         if ($utilisateur && password_verify($motDePasse, $utilisateur['mot_de_passe'])) {
-            // Connexion réussie : on enregistre l'utilisateur en session
             $_SESSION['id_utilisateur'] = $utilisateur['id_utilisateur'];
             $_SESSION['email']          = $utilisateur['email'];
             $_SESSION['role']           = $utilisateur['role'];
@@ -38,49 +36,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$titrePage = "Connexion";
+require __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brico'brac — Connexion</title>
-</head>
-<body>
-    <header>
-        <h1>Brico'brac</h1>
-        <nav>
-            <a href="index.php">Accueil</a> |
-            <a href="produits.php">Liste des produits</a>
-        </nav>
-    </header>
 
-    <main>
-        <h2>Connexion administrateur</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
 
-        <?php if ($erreur !== ''): ?>
-            <p style="color: red;"><?= htmlspecialchars($erreur) ?></p>
-        <?php endif; ?>
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-center">
+                <h3 class="mb-0">Connexion administrateur</h3>
+            </div>
+            <div class="card-body p-4">
 
-        <form method="POST" action="connexion.php">
-            <p>
-                <label>Email :<br>
-                    <input type="email" name="email" required>
-                </label>
-            </p>
-            <p>
-                <label>Mot de passe :<br>
-                    <input type="password" name="mot_de_passe" required>
-                </label>
-            </p>
-            <p>
-                <button type="submit">Se connecter</button>
-            </p>
-        </form>
-    </main>
+                <?php if ($erreur !== ''): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
+                <?php endif; ?>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> Brico'brac</p>
-    </footer>
-</body>
-</html>
+                <form method="POST" action="connexion.php">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" name="mot_de_passe" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php require __DIR__ . '/includes/footer.php'; ?>

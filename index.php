@@ -1,30 +1,15 @@
 <?php
-// Page d'accueil de Brico'brac (FP1)
+$titrePage = "Accueil";
+require __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brico'brac — Accueil</title>
-</head>
-<body>
-  <header>
-    <h1>Brico'brac</h1>
-    <nav>
-        <a href="index.php">Accueil</a> |
-        <a href="produits.php">Liste des produits</a> |
-        <a href="connexion.php">Connexion admin</a>
-    </nav>
-  </header>
 
-    <main>
-        <p>Bienvenue sur Brico'brac ! La référence du magasin de bricolage près de chez vous !</p>
-        <p><a href="produits.php">Voir tous nos produits</a></p>
-    </main>
+<div class="bg-white p-5 rounded shadow-sm">
+    <h1 class="display-4">Brico'brac</h1>
+    <p class="lead">Bienvenue sur Brico'brac ! La référence du magasin de bricolage près de chez vous !</p>
+    <hr>
+    <p>
+        <a class="btn btn-primary btn-lg" href="produits.php">Voir tous nos produits</a>
+    </p>
+</div>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> Brico'brac</p>
-    </footer>
-</body>
-</html>
+<?php require __DIR__ . '/includes/footer.php'; ?>
