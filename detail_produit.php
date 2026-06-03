@@ -39,7 +39,8 @@ $aRemise      = $produit['remise_pourcentage'] > 0;
         <h1>Brico'brac</h1>
         <nav>
             <a href="index.php">Accueil</a> |
-            <a href="produits.php">Liste des produits</a>
+            <a href="produits.php">Liste des produits</a> |
+            <a href="connexion.php">Connexion admin</a>
         </nav>
     </header>
 

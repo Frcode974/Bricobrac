@@ -18,12 +18,13 @@ $produits = $stmt->fetchAll();
 </head>
 <body>
     <header>
-        <h1>Brico'brac</h1>
-        <nav>
-            <a href="index.php">Accueil</a> |
-            <a href="produits.php">Liste des produits</a>
-        </nav>
-    </header>
+    <h1>Brico'brac</h1>
+    <nav>
+        <a href="index.php">Accueil</a> |
+        <a href="produits.php">Liste des produits</a> |
+        <a href="connexion.php">Connexion admin</a>
+    </nav>
+</header>
 
     <main>
         <h2>Liste des produits</h2>

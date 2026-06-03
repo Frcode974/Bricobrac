@@ -9,9 +9,14 @@
     <title>Brico'brac — Accueil</title>
 </head>
 <body>
-    <header>
-        <h1>Brico'brac</h1>
-    </header>
+  <header>
+    <h1>Brico'brac</h1>
+    <nav>
+        <a href="index.php">Accueil</a> |
+        <a href="produits.php">Liste des produits</a> |
+        <a href="connexion.php">Connexion admin</a>
+    </nav>
+  </header>
 
     <main>
         <p>Bienvenue sur Brico'brac ! La référence du magasin de bricolage près de chez vous !</p>
