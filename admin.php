@@ -4,36 +4,41 @@
 // =====================================================================
 
 require __DIR__ . '/includes/auth.php';
+
+$titrePage = "Administration";
+require __DIR__ . '/includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Brico'brac — Administration</title>
-</head>
-<body>
-    <header>
-        <h1>Brico'brac — Administration</h1>
-        <nav>
-            <a href="index.php">Accueil</a> |
-            <a href="produits.php">Liste publique</a> |
-            <a href="deconnexion.php">Se déconnecter</a>
-        </nav>
-    </header>
 
-    <main>
-        <h2>Tableau de bord</h2>
-        <p>Bonjour <?= htmlspecialchars($_SESSION['email']) ?>, vous êtes connecté en tant que <strong><?= htmlspecialchars($_SESSION['role']) ?></strong>.</p>
+<h2 class="mb-1">Tableau de bord</h2>
+<p class="text-muted mb-4">
+    Bonjour <strong><?= htmlspecialchars($_SESSION['email']) ?></strong>,
+    connecté en tant que <span class="badge bg-primary"><?= htmlspecialchars($_SESSION['role']) ?></span>.
+</p>
 
-        <h3>Actions disponibles</h3>
-<ul>
-    <li><a href="admin_produits.php">Gestion des produits</a></li>
-    <li><a href="admin_utilisateurs.php">Gestion des utilisateurs</a></li>
-</ul>
-    </main>
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Gestion des produits</h5>
+                <p class="card-text text-muted">
+                    Consulter, ajouter, modifier ou supprimer les produits du catalogue.
+                </p>
+                <a href="admin_produits.php" class="btn btn-primary">Accéder</a>
+            </div>
+        </div>
+    </div>
 
-    <footer>
-        <p>&copy; <?= date('Y') ?> Brico'brac</p>
-    </footer>
-</body>
-</html>
+    <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">Gestion des utilisateurs</h5>
+                <p class="card-text text-muted">
+                    Créer, modifier ou supprimer les comptes administrateurs.
+                </p>
+                <a href="admin_utilisateurs.php" class="btn btn-primary">Accéder</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php require __DIR__ . '/includes/footer.php'; ?>
