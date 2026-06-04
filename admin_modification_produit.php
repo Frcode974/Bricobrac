@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/includes/auth.php';
 require __DIR__ . '/config/db.php';
+// Récupérer les catégories pour le sélecteur
+$categories = $pdo->query("SELECT * FROM categories ORDER BY nom")->fetchAll();
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($id <= 0) { die("Identifiant produit invalide."); }
@@ -19,6 +21,7 @@ $prix_ht            = $produit['prix_ht'];
 $tva_pourcentage    = $produit['tva_pourcentage'];
 $remise_pourcentage = $produit['remise_pourcentage'];
 $est_nouveaute      = $produit['est_nouveaute'];
+$id_categorie       = $produit['id_categorie'] ?? 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom                = trim($_POST['nom'] ?? '');
@@ -27,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tva_pourcentage    = trim($_POST['tva_pourcentage'] ?? '');
     $remise_pourcentage = trim($_POST['remise_pourcentage'] ?? '0');
     $est_nouveaute      = isset($_POST['est_nouveaute']) ? 1 : 0;
-
+    $id_categorie = (int) ($_POST['id_categorie'] ?? 0);
+   
     if ($nom === '' || $reference === '' || $prix_ht === '' || $tva_pourcentage === '') {
         $erreur = 'Tous les champs obligatoires doivent être remplis.';
     } elseif (!is_numeric($prix_ht) || $prix_ht <= 0) {
@@ -39,15 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $stmt = $pdo->prepare("
-                UPDATE produits
-                SET nom = ?, reference = ?, prix_ht = ?, tva_pourcentage = ?,
-                    remise_pourcentage = ?, est_nouveaute = ?
-                WHERE id_produit = ?
-            ");
-            $stmt->execute([
-                $nom, $reference, (float)$prix_ht, (float)$tva_pourcentage,
-                (float)$remise_pourcentage, $est_nouveaute, $id,
-            ]);
+    UPDATE produits
+    SET nom = ?, reference = ?, prix_ht = ?, tva_pourcentage = ?,
+        remise_pourcentage = ?, est_nouveaute = ?, id_categorie = ?
+    WHERE id_produit = ?
+");
+$stmt->execute([
+    $nom, $reference, (float)$prix_ht, (float)$tva_pourcentage,
+    (float)$remise_pourcentage, $est_nouveaute,
+    $id_categorie > 0 ? $id_categorie : null,
+    $id,
+]);
             $succes = "Le produit « $nom » a bien été modifié.";
         } catch (PDOException $e) {
             $erreur = $e->getCode() === '23000'
@@ -102,6 +108,17 @@ require __DIR__ . '/includes/header.php';
                             <input type="number" step="0.01" min="0" max="100" name="remise_pourcentage" class="form-control" value="<?= htmlspecialchars($remise_pourcentage) ?>">
                         </div>
                     </div>
+                    <div class="mb-3">
+    <label class="form-label">Catégorie</label>
+    <select name="id_categorie" class="form-select">
+        <option value="0">— Sans catégorie —</option>
+        <?php foreach ($categories as $c): ?>
+            <option value="<?= $c['id_categorie'] ?>" <?= $id_categorie == $c['id_categorie'] ? 'selected' : '' ?>>
+                <?= htmlspecialchars($c['nom']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
                     <div class="form-check mb-4">
                         <input type="checkbox" name="est_nouveaute" value="1" class="form-check-input" id="nouv" <?= $est_nouveaute ? 'checked' : '' ?>>
                         <label class="form-check-label" for="nouv">Marquer comme nouveauté</label>

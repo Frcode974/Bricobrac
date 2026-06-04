@@ -41,4 +41,14 @@ require __DIR__ . '/includes/header.php';
     </div>
 </div>
 
+<div class="col-md-6">
+    <div class="card shadow-sm h-100">
+        <div class="card-body">
+            <h5 class="card-title">Gestion des catégories</h5>
+            <p class="card-text text-muted">Créer et consulter les catégories de produits.</p>
+            <a href="admin_categories.php" class="btn btn-primary">Accéder</a>
+        </div>
+    </div>
+</div>
+
 <?php require __DIR__ . '/includes/footer.php'; ?>

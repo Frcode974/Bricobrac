@@ -1,14 +1,58 @@
 <?php
 require __DIR__ . '/config/db.php';
 
-$stmt = $pdo->query("SELECT * FROM produits ORDER BY nom");
+// Récupérer toutes les catégories pour la liste
+$categories = $pdo->query("SELECT * FROM categories ORDER BY nom")->fetchAll();
+
+// Filtre catégorie si demandé
+$idCategorie = isset($_GET['categorie']) ? (int) $_GET['categorie'] : 0;
+
+if ($idCategorie > 0) {
+    $stmt = $pdo->prepare("SELECT * FROM produits WHERE id_categorie = ? ORDER BY nom");
+    $stmt->execute([$idCategorie]);
+} else {
+    $stmt = $pdo->query("SELECT * FROM produits ORDER BY nom");
+}
 $produits = $stmt->fetchAll();
+
+// Récupérer le nom de la catégorie sélectionnée si filtre actif
+$categorieActive = null;
+if ($idCategorie > 0) {
+    $stmt = $pdo->prepare("SELECT nom FROM categories WHERE id_categorie = ?");
+    $stmt->execute([$idCategorie]);
+    $categorieActive = $stmt->fetch();
+}
 
 $titrePage = "Liste des produits";
 require __DIR__ . '/includes/header.php';
 ?>
 
 <h2 class="mb-4">Liste des produits</h2>
+<div class="row">
+    <div class="col-md-3">
+        <div class="bg-white p-3 rounded shadow-sm mb-4">
+            <h5>Catégories</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item <?= $idCategorie === 0 ? 'active' : '' ?>">
+                    <a href="produits.php" class="<?= $idCategorie === 0 ? 'text-white' : 'text-decoration-none' ?>">
+                        Toutes les catégories
+                    </a>
+                </li>
+                <?php foreach ($categories as $c): ?>
+                    <li class="list-group-item <?= $idCategorie === (int)$c['id_categorie'] ? 'active' : '' ?>">
+                        <a href="produits.php?categorie=<?= $c['id_categorie'] ?>" class="<?= $idCategorie === (int)$c['id_categorie'] ? 'text-white' : 'text-decoration-none' ?>">
+                            <?= htmlspecialchars($c['nom']) ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <?php if ($categorieActive): ?>
+            <h4 class="mb-3">Catégorie : <?= htmlspecialchars($categorieActive['nom']) ?></h4>
+        <?php endif; ?>
 
 <div class="table-responsive bg-white p-3 rounded shadow-sm">
     <table class="table table-striped table-hover align-middle">
@@ -70,6 +114,8 @@ require __DIR__ . '/includes/header.php';
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
+</div>
 </div>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
